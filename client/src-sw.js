@@ -10,9 +10,11 @@ precacheAndRoute(self.__WB_MANIFEST);
 const pageCache = new CacheFirst({
   cacheName: 'page-cache',
   plugins: [
+    // This plugin will cache responses with these headers
     new CacheableResponsePlugin({
       statuses: [0, 200],
     }),
+    //This plugin will cache to a maximum-age of 30 days
     new ExpirationPlugin({
       maxAgeSeconds: 30 * 24 * 60 * 60,
     }),
@@ -26,5 +28,15 @@ warmStrategyCache({
 
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
-// TODO: Implement asset caching
-registerRoute();
+registerRoute(({ request }) => ['style', 'script', 'worker'].includes(request.destination),
+  new StaleWhileRevalidate({
+    // Name of the cache storage.
+    cacheName: 'asset-cache',
+    plugins: [
+      // This plugin will cache responses with these headers
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  })
+);
