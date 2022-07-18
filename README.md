@@ -4,6 +4,8 @@
 
 This project consists in developing a text editor with all the functionalities of a PWA. It has a service worker, cache and indexedDB to store the data.
 
+[Deployed Link](https://jateditor.herokuapp.com/)
+
 ## Table of Contents
 
   - [Installation](#installation)
